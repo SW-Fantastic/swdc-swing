@@ -6,6 +6,7 @@ import org.swdc.ours.common.annotations.Annotations;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public class ViewManager extends AbstractDependencyScope {
 
@@ -52,6 +53,7 @@ public class ViewManager extends AbstractDependencyScope {
 
     private JFrame initFrame(AnnotationDescription description, JComponent content) {
         JFrame frame = new JFrame();
+        //AffineTransform transform = frame.getGraphicsConfiguration().getDefaultTransform();
         frame.setSize(
                 description.getProperty(Integer.class,"width"),
                 description.getProperty(Integer.class, "height")
@@ -77,25 +79,22 @@ public class ViewManager extends AbstractDependencyScope {
         int minHeight = description.getProperty(Integer.class,"minHeight");
         boolean resize = description.getProperty(Boolean.class, "resizeable");
 
-        Dimension min = frame.getMinimumSize();
-        if (minHeight > 0) {
-            min.setSize(min.getWidth(),minHeight);
-        }
-        if (minWidth > 0) {
-            min.setSize(minWidth, min.getHeight());
-        }
+        Dimension min = new Dimension(
+                minWidth > 0  ? (int)(minWidth) : (int)(frame.getWidth()),
+                minHeight > 0 ? (int)(minHeight) : (int)(frame.getHeight())
+        );
         frame.setMinimumSize(min);
         frame.setResizable(resize);
-
+        frame.setLocationRelativeTo(null);
         return frame;
     }
 
     private JDialog initDialog(AnnotationDescription description, JComponent content) {
+
+
         JDialog frame = new JDialog();
-        frame.setSize(
-                description.getProperty(Integer.class,"width"),
-                description.getProperty(Integer.class, "height")
-        );
+        //AffineTransform transform = frame.getGraphicsConfiguration().getDefaultTransform();
+
         frame.setTitle(description.getProperty(String.class,"title"));
         frame.setContentPane(content);
         frame.setLocationRelativeTo(null);
@@ -117,15 +116,17 @@ public class ViewManager extends AbstractDependencyScope {
         int minHeight = description.getProperty(Integer.class,"minHeight");
         boolean resize = description.getProperty(Boolean.class, "resizeable");
 
-        Dimension min = frame.getMinimumSize();
-        if (minHeight > 0) {
-            min.setSize(min.getWidth(),minHeight);
-        }
-        if (minWidth > 0) {
-            min.setSize(minWidth, min.getHeight());
-        }
+        Dimension min = new Dimension(
+                minWidth > 0  ? (int)(minWidth ) : (int)(frame.getWidth() ),
+                minHeight > 0 ? (int)(minHeight) : (int)(frame.getHeight())
+        );
         frame.setMinimumSize(min);
         frame.setResizable(resize);
+        frame.setSize(
+                description.getProperty(Integer.class,"width"),
+                description.getProperty(Integer.class, "height")
+        );
+        frame.setLocationRelativeTo(null);
         return frame;
     }
 
