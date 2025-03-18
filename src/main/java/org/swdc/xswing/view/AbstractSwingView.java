@@ -62,6 +62,13 @@ public abstract class AbstractSwingView {
         }
     }
 
+    public void hide() {
+        if (window == null) {
+            return;
+        }
+        window.setVisible(false);
+    }
+
     public ViewController getController() {
         return controller;
     }
